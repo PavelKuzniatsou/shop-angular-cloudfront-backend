@@ -1,37 +1,73 @@
 'use strict';
 
-const PRODUCTS_LIST = require('./products.json');
-const DEFAULT_RESPONSE = {
-    statusCode: 500,
-    headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Credentials': true,
-    },
-    body: 'Product not found',
+const AWS = require('aws-sdk');
+const db = new AWS.DynamoDB.DocumentClient();
+
+const ProductsTableName = process.env.PRODUCTS_TABLE;
+const StocksTableName = process.env.STOCKS_TABLE;
+
+const { DEFAULT_HEADERS } = require('./common');
+
+const getProduct = async (id) => {
+    return await db
+        .get({
+            TableName: ProductsTableName,
+            Key: {
+                id,
+            },
+        })
+        .promise();
 };
 
-module.exports = async (event) => {
+const getStock = async (product_id) => {
+    return await db
+        .get({
+            TableName: StocksTableName,
+            Key: {
+                product_id,
+            },
+        })
+        .promise();
+};
+
+const getProductById = async (event) => {
     if (!event || !event.pathParameters) {
         return {
-            ...DEFAULT_RESPONSE,
+            statusCode: 400,
+            headers: DEFAULT_HEADERS,
             body: 'Please provide ID',
         };
     }
 
     const id = event.pathParameters.id;
 
-    const product = PRODUCTS_LIST.find((item) => item.id === id);
+    const [product, stock] = await Promise.all([getProduct(id), getStock(id)]);
 
-    return product
-        ? {
-              ...DEFAULT_RESPONSE,
-              statusCode: 200,
-              body: JSON.stringify({ product }),
-          }
-        : {
-              ...DEFAULT_RESPONSE,
-          };
+    if (product.Item && stock.Item) {
+        const item = { ...product.Item, count: stock.Item.count || 0 };
 
-    // Use this code if you don't use the http event with the LAMBDA-PROXY integration
-    // return { message: 'Go Serverless v1.0! Your function executed successfully!', event };
+        return {
+            statusCode: 200,
+            headers: DEFAULT_HEADERS,
+            body: JSON.stringify({ product: item }),
+        };
+    } else {
+        return {
+            statusCode: 404,
+            headers: DEFAULT_HEADERS,
+            body: 'Product not found',
+        };
+    }
+};
+
+module.exports = async (event) => {
+    try {
+        return await getProductById(event);
+    } catch {
+        return {
+            statusCode: 500,
+            headers: DEFAULT_HEADERS,
+            body: 'Something goes wrong.',
+        };
+    }
 };

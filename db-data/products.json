@@ -1,0 +1,84 @@
+{
+    "Products": [
+        {
+            "PutRequest": {
+                "Item": {
+                    "id": { "S": "7567ec4b-b10c-48c5-9345-fc73c48a80aa" },
+                    "description": { "S": "Grand Theft Auto V" },
+                    "price": { "N": "2.4" },
+                    "title": { "S": "Grand Theft Auto V" }
+                }
+            }
+        },
+        {
+            "PutRequest": {
+                "Item": {
+                    "id": { "S": "7567ec4b-b10c-48c5-9345-fc73c48a80a0" },
+                    "description": { "S": "Overwatch 2" },
+                    "price": { "N": "10" },
+                    "title": { "S": "Overwatch 2" }
+                }
+            }
+        },
+        {
+            "PutRequest": {
+                "Item": {
+                    "id": { "S": "7567ec4b-b10c-48c5-9345-fc73c48a80a2" },
+                    "description": { "S": "Cyberpunk 2077" },
+                    "price": { "N": 23 },
+                    "title": { "S": "Cyberpunk 2077" }
+                }
+            }
+        },
+        {
+            "PutRequest": {
+                "Item": {
+                    "id": { "S": "7567ec4b-b10c-48c5-9345-fc73c48a80a1" },
+                    "description": { "S": "God of War: Ragnarök" },
+                    "price": { "N": 15 },
+                    "title": { "S": "God of War: Ragnarök" }
+                }
+            }
+        },
+        {
+            "PutRequest": {
+                "Item": {
+                    "id": { "S": "7567ec4b-b10c-48c5-9345-fc73c48a80a3" },
+                    "description": { "S": "Elden Ring" },
+                    "price": { "N": 23 },
+                    "title": { "S": "Elden Ring" }
+                }
+            }
+        },
+        {
+            "PutRequest": {
+                "Item": {
+                    "id": { "S": "7567ec4b-b10c-48c5-9345-fc73348a80a1" },
+                    "description": { "S": "FIFA 23" },
+                    "price": { "N": 15 },
+                    "title": { "S": "FIFA 23" }
+                }
+            }
+        },
+        {
+            "PutRequest": {
+                "Item": {
+                    "id": { "S": "7567ec4b-b10c-48c5-9445-fc73c48a80a2" },
+                    "description": { "S": "Gran Turismo 7" },
+                    "price": { "N": 23 },
+                    "title": { "S": "Gran Turismo 7" }
+                }
+            }
+        },
+        {
+            "PutRequest": {
+                "Item": {
+                    "id": { "S": "7567ec4b-b10c-45c5-9345-fc73c48a80a1" },
+                    "description": { "S": "Ghost of Tsushima" },
+                    "price": { "N": 15 },
+                    "title": { "S": "Ghost of Tsushima" }
+                }
+            }
+        }
+    ]
+}
