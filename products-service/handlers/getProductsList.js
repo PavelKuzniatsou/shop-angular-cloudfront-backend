@@ -1,17 +1,69 @@
 'use strict';
 
-const PRODUCTS_LIST = require('./products.json');
+const AWS = require('aws-sdk');
+const db = new AWS.DynamoDB.DocumentClient();
 
-module.exports = async (_event) => {
+const ProductsTableName = process.env.PRODUCTS_TABLE;
+const StocksTableName = process.env.STOCKS_TABLE;
+
+const { DEFAULT_HEADERS } = require('./common');
+
+const getProducts = async () => {
+    return await db
+        .scan({
+            TableName: ProductsTableName,
+        })
+        .promise();
+};
+
+const getStocks = async () => {
+    return await db
+        .scan({
+            TableName: StocksTableName,
+        })
+        .promise();
+};
+
+const mergeResults = (productItems, stockItems) => {
+    const productsMap = new Map();
+
+    productItems.forEach((product) => {
+        const id = product.id;
+        productsMap.set(id, product);
+    });
+
+    stockItems.forEach((stock) => {
+        const id = stock.product_id;
+        const item = productsMap.get(id);
+        if (item) {
+            item.count = stock.count;
+            productsMap.set(id, item);
+        }
+    });
+
+    return Array.from(productsMap.values());
+};
+
+const getProductsList = async (_event) => {
+    const [products, stocks] = await Promise.all([getProducts(), getStocks()]);
+    const items = mergeResults(products.Items, stocks.Items);
+
     return {
         statusCode: 200,
-        headers: {
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Credentials': true,
-        },
-        body: JSON.stringify(PRODUCTS_LIST),
+        headers: DEFAULT_HEADERS,
+        body: JSON.stringify(items),
     };
+};
 
-    // Use this code if you don't use the http event with the LAMBDA-PROXY integration
-    // return { message: 'Go Serverless v1.0! Your function executed successfully!', event };
+module.exports = async (event) => {
+    try {
+        console.log('getProductsList: ', JSON.stringify(event));
+        return await getProductsList(event);
+    } catch {
+        return {
+            statusCode: 500,
+            headers: DEFAULT_HEADERS,
+            body: 'Something goes wrong.',
+        };
+    }
 };
