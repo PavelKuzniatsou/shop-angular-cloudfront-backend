@@ -26,6 +26,9 @@ provider:
   runtime: nodejs12.x
   stage: dev
   region: eu-west-1
+  environment:
+    PRODUCTS_TABLE: Products
+    STOCKS_TABLE: Stocks
   iam:
     role:
       statements:
