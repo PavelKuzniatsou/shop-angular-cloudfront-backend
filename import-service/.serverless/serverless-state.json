@@ -10,7 +10,8 @@
       "stage": "dev",
       "region": "eu-west-1",
       "environment": {
-        "BUCKET_NAME": "cloud-development-course-import"
+        "BUCKET_NAME": "cloud-development-course-import",
+        "SQS_URL": "https://sqs.eu-west-1.amazonaws.com/508220294216/products-queue"
       },
       "iam": {
         "role": {
@@ -28,6 +29,13 @@
                 "s3:*"
               ],
               "Resource": "arn:aws:s3:::cloud-development-course-import/*"
+            },
+            {
+              "Effect": "Allow",
+              "Action": [
+                "sqs:*"
+              ],
+              "Resource": "arn:aws:sqs:eu-west-1:508220294216:products-queue"
             }
           ]
         }
@@ -180,6 +188,9 @@
                       },
                       {
                         "$ref": "$[\"service\"][\"provider\"][\"iam\"][\"role\"][\"statements\"][1]"
+                      },
+                      {
+                        "$ref": "$[\"service\"][\"provider\"][\"iam\"][\"role\"][\"statements\"][2]"
                       }
                     ]
                   }
@@ -208,7 +219,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/import-service/dev/1666734890269-2022-10-25T21:54:50.269Z/import-service.zip"
+                "S3Key": "serverless/import-service/dev/1667170661727-2022-10-30T22:57:41.727Z/import-service.zip"
               },
               "Handler": "handler.importProductsFile",
               "Runtime": "nodejs12.x",
@@ -217,7 +228,8 @@
               "Timeout": 6,
               "Environment": {
                 "Variables": {
-                  "BUCKET_NAME": "cloud-development-course-import"
+                  "BUCKET_NAME": "cloud-development-course-import",
+                  "SQS_URL": "https://sqs.eu-west-1.amazonaws.com/508220294216/products-queue"
                 }
               },
               "Role": {
@@ -238,7 +250,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/import-service/dev/1666734890269-2022-10-25T21:54:50.269Z/import-service.zip"
+                "S3Key": "serverless/import-service/dev/1667170661727-2022-10-30T22:57:41.727Z/import-service.zip"
               },
               "Handler": "handler.importFileParser",
               "Runtime": "nodejs12.x",
@@ -247,7 +259,8 @@
               "Timeout": 6,
               "Environment": {
                 "Variables": {
-                  "BUCKET_NAME": "cloud-development-course-import"
+                  "BUCKET_NAME": "cloud-development-course-import",
+                  "SQS_URL": "https://sqs.eu-west-1.amazonaws.com/508220294216/products-queue"
                 }
               },
               "Role": {
@@ -261,24 +274,24 @@
               "ImportFileParserLogGroup"
             ]
           },
-          "ImportProductsFileLambdaVersionAnEYeWIGjADlsl7QQwaE8NQXfXi4MpL99bgMQXoYU": {
+          "ImportProductsFileLambdaVersion1TpUjj0O3yDGeZ3777FjHRqPvI8ED9tIfHLy83XSw": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "ImportProductsFileLambdaFunction"
               },
-              "CodeSha256": "+nMm0d8tQQu/WtozDu/5/hNiLXqp8qbEPEz90ByhkU4="
+              "CodeSha256": "H1CKIvQllhk4750s0Gk4x9mc4LMVDWNWrbQZ5/XIFT4="
             }
           },
-          "ImportFileParserLambdaVersionV0tHskTjSHQxwe4XGER83JvRYsbZF2RdgRL5hCw8": {
+          "ImportFileParserLambdaVersionZen5FL0QZ2ReNKamxaYHhAAYpuyrJlNAsKoFu6qRiUk": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "ImportFileParserLambdaFunction"
               },
-              "CodeSha256": "+nMm0d8tQQu/WtozDu/5/hNiLXqp8qbEPEz90ByhkU4="
+              "CodeSha256": "H1CKIvQllhk4750s0Gk4x9mc4LMVDWNWrbQZ5/XIFT4="
             }
           },
           "ImportFileParserCustomS31": {
@@ -405,7 +418,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/import-service/dev/1666734890269-2022-10-25T21:54:50.269Z/custom-resources.zip"
+                "S3Key": "serverless/import-service/dev/1667170661727-2022-10-30T22:57:41.727Z/custom-resources.zip"
               },
               "FunctionName": "import-service-dev-custom-resource-existing-s3",
               "Handler": "s3/handler.handler",
@@ -557,7 +570,7 @@
               "Name": "import-service-dev | Validate request body and querystring parameters"
             }
           },
-          "ApiGatewayDeployment1666734889315": {
+          "ApiGatewayDeployment1667170661004": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -620,7 +633,7 @@
           "ImportProductsFileLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "ImportProductsFileLambdaVersionAnEYeWIGjADlsl7QQwaE8NQXfXi4MpL99bgMQXoYU"
+              "Ref": "ImportProductsFileLambdaVersion1TpUjj0O3yDGeZ3777FjHRqPvI8ED9tIfHLy83XSw"
             },
             "Export": {
               "Name": "sls-import-service-dev-ImportProductsFileLambdaFunctionQualifiedArn"
@@ -629,7 +642,7 @@
           "ImportFileParserLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "ImportFileParserLambdaVersionV0tHskTjSHQxwe4XGER83JvRYsbZF2RdgRL5hCw8"
+              "Ref": "ImportFileParserLambdaVersionZen5FL0QZ2ReNKamxaYHhAAYpuyrJlNAsKoFu6qRiUk"
             },
             "Export": {
               "Name": "sls-import-service-dev-ImportFileParserLambdaFunctionQualifiedArn"
@@ -788,7 +801,7 @@
         "timeout": 6,
         "runtime": "nodejs12.x",
         "vpc": {},
-        "versionLogicalId": "ImportProductsFileLambdaVersionAnEYeWIGjADlsl7QQwaE8NQXfXi4MpL99bgMQXoYU"
+        "versionLogicalId": "ImportProductsFileLambdaVersion1TpUjj0O3yDGeZ3777FjHRqPvI8ED9tIfHLy83XSw"
       },
       "importFileParser": {
         "handler": "handler.importFileParser",
@@ -812,7 +825,7 @@
         "timeout": 6,
         "runtime": "nodejs12.x",
         "vpc": {},
-        "versionLogicalId": "ImportFileParserLambdaVersionV0tHskTjSHQxwe4XGER83JvRYsbZF2RdgRL5hCw8"
+        "versionLogicalId": "ImportFileParserLambdaVersionZen5FL0QZ2ReNKamxaYHhAAYpuyrJlNAsKoFu6qRiUk"
       }
     },
     "configValidationMode": "warn",
@@ -830,7 +843,7 @@
         ],
         "artifactsS3KeyDirname": "serverless/import-service/dev/code-artifacts",
         "artifact": "G:\\Repositories\\shop-angular-cloudfront-backend\\import-service\\.serverless\\import-service.zip",
-        "artifactDirectoryName": "serverless/import-service/dev/1666734890269-2022-10-25T21:54:50.269Z"
+        "artifactDirectoryName": "serverless/import-service/dev/1667170661727-2022-10-30T22:57:41.727Z"
       },
       "functions": {
         "$ref": "$[\"service\"][\"functions\"]"
@@ -841,7 +854,7 @@
     "artifact": "G:\\Repositories\\shop-angular-cloudfront-backend\\import-service\\.serverless\\import-service.zip"
   },
   "package": {
-    "artifactDirectoryName": "serverless/import-service/dev/1666734890269-2022-10-25T21:54:50.269Z",
+    "artifactDirectoryName": "serverless/import-service/dev/1667170661727-2022-10-30T22:57:41.727Z",
     "artifact": "import-service.zip"
   }
 }
