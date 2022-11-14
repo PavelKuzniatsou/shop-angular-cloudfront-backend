@@ -28,6 +28,7 @@ provider:
   region: eu-west-1
   environment:
     BUCKET_NAME: cloud-development-course-import
+    SQS_URL: https://sqs.eu-west-1.amazonaws.com/508220294216/products-queue
   iam:
     role:
       statements:
@@ -40,6 +41,10 @@ provider:
             - "s3:*"
           Resource:
             - "arn:aws:s3:::${self:provider.environment.BUCKET_NAME}/*"
+        - Effect: Allow
+          Action: "sqs:*"
+          Resource:
+            - "arn:aws:sqs:eu-west-1:508220294216:products-queue"
  
 package:
   patterns:
